@@ -31,7 +31,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
-});
+})
 
 // per bottone generate slug in create
 const btnSlugger = document.querySelector('#btn-slugger');

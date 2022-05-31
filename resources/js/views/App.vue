@@ -1,19 +1,19 @@
 <template>
   <div>
       <header-section></header-section>
-      <card></card>
+      <card-post></card-post>
   </div>
 </template>
 
 <script>
     import HeaderSection from '../components/HeaderSection.vue';
-    import Card from '../components/Card.vue';
+    import CardPost from '../components/CardPost.vue';
 
 export default {
     name: 'App',
     components: {
         HeaderSection,
-        Card
+        CardPost
     }
 }
 </script>
