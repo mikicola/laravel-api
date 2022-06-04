@@ -23,11 +23,13 @@
     {{-- chiamo componente navbar --}}
     <x-navbar color="light" />
 
-    <main class="py-4">
-        <div id="app">
-            @yield('content')
-        </div>
-    </main>
+    <div class="container">
+        <main class="py-4">
+            <div id="app">
+                @yield('content')
+            </div>
+        </main>
+    </div>
 
 </body>
 </html>
