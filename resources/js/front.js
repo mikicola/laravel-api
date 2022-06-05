@@ -11,6 +11,19 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.Axios = require('axios');
 
+import App from './views/App.vue';
+
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+
+import PageHome from './pages/PageHome.vue';
+import PageAbout from './pages/PageAbout.vue';
+import PageBlog from './pages/PageBlog.vue';
+import postsShow from './pages/postsShow.vue';
+
+
+Vue.use(VueRouter);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -31,9 +44,37 @@ window.Axios = require('axios');
  */
 
 import App from './views/App.vue';
+
+const router = new VueRouter({
+    routes:[
+        {
+            path:'/',
+            name: 'home',
+            component: PageHome,
+        },
+        {
+            path:'/about',
+            name: 'about',
+            component: PageAbout,
+        },
+        {
+            path:'/blog',
+            name: 'blog',
+            component: PageBlog,
+        },
+        {
+            path:'/blog/:slug',
+            name: 'postsShow',
+            component: postsShow,
+        },
+
+    ]
+});
+
 const app = new Vue({
     el: '#app',
     render: h => h(App),
+    router,
 });
 
 

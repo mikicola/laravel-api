@@ -14,20 +14,35 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-4">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
+                    <li class="page-item" @click="getData(firstPageUrl)" :class="{disabled: currentPage ==1}">
+                        <a class="page-link">First</a>
+                    </li>
                     <li class="page-item" @click="getData(prevPageUrl)" :class="{disabled: !prevPageUrl}">
                         <a class="page-link">Previous</a>
                     </li>
                     <!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                    <li class="page-item"><a class="page-link" href="#">2</a></li> -->
+
+                    <li class="page-item">
+                        <form @submit.prevent="getData(baseApiUrl + '/?page=' + numNewPage)">
+                            <input type="text" v-model="numNewPage" placeholder="page number here">
+                        </form>
+                    </li>
+
                     <li class="page-item" @click="getData(nextPageUrl)" :class="{disabled: !nextPageUrl}">
                         <a class="page-link">Next</a>
                     </li>
+                    <li class="page-item" @click="getData(lastPageUrl)" :class="{disabled: !prevPageUrl}">
+                        <a class="page-link">Last</a>
+                    </li>
                 </ul>
             </nav>
+            <div class="text-center">
+                page {{ currentPage }} of {{ numLastPage }}
+            </div>
         </div>
     </div>
 </template>
@@ -38,9 +53,19 @@ export default {
     data(){
         return{
             posts:[],
+
             baseApiUrl: 'http://localhost:8000/api/posts',
+
+            currentPage: null,
+            numNewPage: null,
+
             prevPageUrl: null,
             nextPageUrl: null,
+
+            firstPageUrl: null,
+            lastPageUrl: null,
+
+            numLastPage: null,
         }
 
     },
@@ -53,8 +78,16 @@ export default {
                 Axios.get(url)
                 .then(axRes => {
                     this.posts = axRes.data.response.data;
+                    this.numLastPage = axRes.data.response.last_page;
+
+                    this.currentPage = axRes.data.response.current_page;
+                    this.nNewPage = null;
+
                     this.prevPageUrl = axRes.data.response.prev_page_url;
                     this.nextPageUrl = axRes.data.response.next_page_url;
+
+                    this.firstPageUrl = axRes.data.response.first_page_url;
+                    this.lastPageUrl = axRes.data.response.last_page_url;
                 })
             }
         }

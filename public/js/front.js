@@ -5136,14 +5136,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ContainerPosts',
   data: function data() {
     return {
       posts: [],
       baseApiUrl: 'http://localhost:8000/api/posts',
+      currentPage: null,
+      numNewPage: null,
       prevPageUrl: null,
-      nextPageUrl: null
+      nextPageUrl: null,
+      firstPageUrl: null,
+      lastPageUrl: null,
+      numLastPage: null
     };
   },
   created: function created() {
@@ -5156,8 +5176,13 @@ __webpack_require__.r(__webpack_exports__);
       if (url) {
         Axios.get(url).then(function (axRes) {
           _this.posts = axRes.data.response.data;
+          _this.numLastPage = axRes.data.response.last_page;
+          _this.currentPage = axRes.data.response.current_page;
+          _this.nNewPage = null;
           _this.prevPageUrl = axRes.data.response.prev_page_url;
           _this.nextPageUrl = axRes.data.response.next_page_url;
+          _this.firstPageUrl = axRes.data.response.first_page_url;
+          _this.lastPageUrl = axRes.data.response.last_page_url;
         });
       }
     }
@@ -28617,9 +28642,23 @@ var render = function () {
       0
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "row mt-4" }, [
       _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
         _c("ul", { staticClass: "pagination justify-content-center" }, [
+          _c(
+            "li",
+            {
+              staticClass: "page-item",
+              class: { disabled: _vm.currentPage == 1 },
+              on: {
+                click: function ($event) {
+                  return _vm.getData(_vm.firstPageUrl)
+                },
+              },
+            },
+            [_c("a", { staticClass: "page-link" }, [_vm._v("First")])]
+          ),
+          _vm._v(" "),
           _c(
             "li",
             {
@@ -28634,6 +28673,44 @@ var render = function () {
             [_c("a", { staticClass: "page-link" }, [_vm._v("Previous")])]
           ),
           _vm._v(" "),
+          _c("li", { staticClass: "page-item" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.getData(
+                      _vm.baseApiUrl + "/?page=" + _vm.numNewPage
+                    )
+                  },
+                },
+              },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.numNewPage,
+                      expression: "numNewPage",
+                    },
+                  ],
+                  attrs: { type: "text", placeholder: "page number here" },
+                  domProps: { value: _vm.numNewPage },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.numNewPage = $event.target.value
+                    },
+                  },
+                }),
+              ]
+            ),
+          ]),
+          _vm._v(" "),
           _c(
             "li",
             {
@@ -28647,7 +28724,31 @@ var render = function () {
             },
             [_c("a", { staticClass: "page-link" }, [_vm._v("Next")])]
           ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              staticClass: "page-item",
+              class: { disabled: !_vm.prevPageUrl },
+              on: {
+                click: function ($event) {
+                  return _vm.getData(_vm.lastPageUrl)
+                },
+              },
+            },
+            [_c("a", { staticClass: "page-link" }, [_vm._v("Last")])]
+          ),
         ]),
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-center" }, [
+        _vm._v(
+          "\n                page " +
+            _vm._s(_vm.currentPage) +
+            " of " +
+            _vm._s(_vm.numLastPage) +
+            "\n            "
+        ),
       ]),
     ]),
   ])
